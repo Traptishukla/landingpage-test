@@ -1,4 +1,4 @@
-name: Deploy LinkedIn to EC2
+name: Deploy LinkedIn to EC2 server
 
 on:
   push:
