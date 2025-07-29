@@ -23,13 +23,13 @@ jobs:
           cd /home/ubuntu/landingpage-test/Marketti.ae/DigitalMarketing
 
           echo "Pulling latest code from main branch..."
-          git pull origin main
+          sudo git pull origin main
 
           echo "Installing dependencies..."
-          npm install
+          sudo npm install
 
           echo "Building app..."
-          npm run build
+          sudo npm run build
 
           echo "Restarting PM2 app..."
           pm2 restart digitalmarketing || pm2 start npm --name "digitalmarketing" -- start
