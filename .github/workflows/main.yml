@@ -19,12 +19,21 @@ jobs:
 
     - name: Deploy to EC2 and Restart App
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} <<EOF
-        cd /home/ubuntu/landingpage-test/Marketti.ae/DigitalMarketing
+        ssh -tt -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+          cd /home/ubuntu/landingpage-test/Marketti.ae/DigitalMarketing
 
+          echo "Pulling latest code from main branch..."
           git pull origin main
 
-          sudo npm install
-          sudo npm run build
+          echo "Installing dependencies..."
+          npm install
+
+          echo "Building app..."
+          npm run build
+
+          echo "Restarting PM2 app..."
           pm2 restart digitalmarketing || pm2 start npm --name "digitalmarketing" -- start
+
+          echo "✅ Deployment complete"
+          sleep 2
         EOF
