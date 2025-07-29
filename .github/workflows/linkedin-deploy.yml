@@ -19,10 +19,11 @@ jobs:
 
     - name: Deploy LinkedIn project to EC2
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
-          cd /home/ubuntu/landingpage-test/Marketti.ae/LinkedIn
-          git pull origin main
-          npm install
-          npm run build
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} "
+          cd /home/ubuntu/landingpage-test/Marketti.ae/LinkedIn &&
+          sudo chown -R ubuntu:ubuntu . &&
+          rm -rf node_modules package-lock.json &&
+          npm install &&
+          npx next build &&
           pm2 restart linkedin || PORT=3001 pm2 start npm --name "linkedin" -- start
-        EOF
+        "
