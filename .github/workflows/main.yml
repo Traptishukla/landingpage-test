@@ -1,0 +1,28 @@
+name: Deploy Next.js to EC2
+
+on:
+  push:
+    branches: [ "main" ]  # ✅ Trigger on push to main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Setup SSH Key
+      run: |
+         echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+         chmod 400 key.pem
+
+    - name: Deploy to EC2 and Restart App
+      run: |
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+          cd /home/ubuntu/landingpages/Marketti.ae/DigitalMarketing
+          git pull origin main
+          npm install
+          npm run build
+          pm2 restart digitalmarketing || pm2 start npm --name "digitalmarketing" -- start
+        EOF
