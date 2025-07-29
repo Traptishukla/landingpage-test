@@ -2,7 +2,7 @@ name: Deploy Next.js to EC2
 
 on:
   push:
-    branches: [ "main" ]  # ✅ Trigger on push to main branch
+    branches: [ "main" ]
 
 jobs:
   deploy:
@@ -14,20 +14,23 @@ jobs:
 
     - name: Setup SSH Key
       run: |
-         echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
-         chmod 400 key.pem
+        echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+        chmod 400 key.pem
 
     - name: Deploy to EC2 and Restart App
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} << EOF
           cd /home/ubuntu/landingpages/Marketti.ae/DigitalMarketing
 
-           # Set Git credentials
+          # Set Git credentials for HTTPS
           git config --global credential.helper store
-          echo "https://${{ secrets.GH_TOKEN }}@github.com" > ~/.git-credentials
-          
-          sudo git pull origin main
-          sudo npm install
-          sudo npm run build
+          echo "https://\$GH_TOKEN@github.com" > ~/.git-credentials
+
+          git pull https://\$GH_TOKEN@github.com/<Traptishukla>/<landingpage-test>.git main
+
+          npm install
+          npm run build
           pm2 restart digitalmarketing || pm2 start npm --name "digitalmarketing" -- start
         EOF
