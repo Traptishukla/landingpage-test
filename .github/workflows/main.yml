@@ -22,18 +22,25 @@ jobs:
         ssh -tt -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
           cd /home/ubuntu/landingpage-test/Marketti.ae/DigitalMarketing
 
-          echo "Pulling latest code from main branch..."
-          sudo git pull origin main
+          echo "🧹 Fixing permissions..."
+          sudo chown -R ubuntu:ubuntu .
 
-          echo "Installing dependencies..."
-          sudo npm install
+          echo "📦 Pulling latest code..."
+          git pull origin main
 
-          echo "Building app..."
-          sudo npm run build
+          echo "🧼 Cleaning old modules (optional)..."
+          rm -rf node_modules package-lock.json
 
-          echo "Restarting PM2 app..."
+          echo "📥 Installing dependencies..."
+          npm install
+
+          echo "🔨 Building app..."
+          npx next build
+
+          echo "🚀 Restarting PM2 app..."
           pm2 restart digitalmarketing || pm2 start npm --name "digitalmarketing" -- start
 
           echo "✅ Deployment complete"
           sleep 2
         EOF
+
