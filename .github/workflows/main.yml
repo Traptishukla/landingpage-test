@@ -20,7 +20,7 @@ jobs:
     - name: Deploy to EC2 and Restart App
       run: |
         ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} <<EOF
-          cd /home/ubuntu/landingpages/Marketti.ae/DigitalMarketing
+          cd /home/ubuntu/landingpage-test/Marketti.ae/DigitalMarketing
 
           # Set Git credentials with token
           git config --global credential.helper store
