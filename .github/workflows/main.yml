@@ -30,7 +30,7 @@ jobs:
 
           git pull https://\$GH_TOKEN@github.com/<Traptishukla>/<landingpage-test>.git main
 
-          npm install
-          npm run build
+          sudo npm install
+          sudo npm run build
           pm2 restart digitalmarketing || pm2 start npm --name "digitalmarketing" -- start
         EOF
