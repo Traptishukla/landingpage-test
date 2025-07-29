@@ -21,8 +21,8 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
           cd /home/ubuntu/landingpages/Marketti.ae/DigitalMarketing
-          git pull origin main
-          npm install
-          npm run build
+          sudo git pull origin main
+          sudo npm install
+          sudo npm run build
           pm2 restart digitalmarketing || pm2 start npm --name "digitalmarketing" -- start
         EOF
