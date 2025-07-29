@@ -1,15 +1,16 @@
-name: Deploy LinkedIn to EC2
+name: Deploy Both Next.js Apps to EC2
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout Code
       uses: actions/checkout@v3
 
     - name: Set up SSH key
@@ -17,13 +18,29 @@ jobs:
         echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
         chmod 400 key.pem
 
-    - name: Deploy LinkedIn project to EC2
+    - name: Deploy DigitalMarketing App
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} "
-          cd /home/ubuntu/landingpage-test/Marketti.ae/LinkedIn &&
-          sudo chown -R ubuntu:ubuntu . &&
-          rm -rf node_modules package-lock.json &&
-          npm install &&
-          npx next build &&
-          pm2 restart linkedin || PORT=3001 pm2 start npm --name "linkedin" -- start
-        "
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} <<EOF
+          cd /home/ubuntu/landingpage-test/Marketti.ae/DigitalMarketing
+          git pull origin main
+          sudo chown -R ubuntu:ubuntu .
+          rm -rf node_modules package-lock.json
+          npm install
+          npm run build
+          pm2 restart digitalmarketing || pm2 start npm --name "digitalmarketing" -- start
+        EOF
+
+    - name: Deploy LinkedIn App (port 4000)
+      run: |
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} <<EOF
+          cd /home/ubuntu/landingpage-test/Marketti.ae/LinkedIn
+          git pull origin main
+          sudo chown -R ubuntu:ubuntu .
+          rm -rf node_modules package-lock.json
+          npm install
+          npm run build
+          pm2 restart linkedin || pm2 start npm --name "linkedin" -- start -- -p 4000
+        EOF
+
+
+
