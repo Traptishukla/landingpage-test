@@ -21,6 +21,11 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
           cd /home/ubuntu/landingpages/Marketti.ae/DigitalMarketing
+
+           # Set Git credentials
+          git config --global credential.helper store
+          echo "https://${{ secrets.GH_TOKEN }}@github.com" > ~/.git-credentials
+          
           sudo git pull origin main
           sudo npm install
           sudo npm run build
