@@ -1,0 +1,43 @@
+name: LinkedIn Deployment
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Write SSH private key
+        run: |
+            mkdir -p ~/.ssh
+            echo "$SSH_KEY" > ~/.ssh/id_ed25519
+            chmod 600 ~/.ssh/id_ed25519
+            ssh-keyscan -H  3.101.126.106 >> ~/.ssh/known_hosts
+        env:
+            SSH_KEY: |
+                
+                -----BEGIN OPENSSH PRIVATE KEY-----
+                 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+                 QyNTUxOQAAACBifutxv9b2PI/eBqbLqnf8HrHTeHXn7FxrI4sZerZURwAAAKDkt2sn5Ldr
+                 JwAAAAtzc2gtZWQyNTUxOQAAACBifutxv9b2PI/eBqbLqnf8HrHTeHXn7FxrI4sZerZURw
+                 AAAEARvHcL4MAVR5tg/pKeMzq8qFKyQT+d7HI2TXWS/AHUo2J+63G/1vY8j94Gpsuqd/we
+                 sdN4defsXGsjixl6tlRHAAAAF3VidW50dUBpcC0xNzItMzEtMzEtMTQ0AQIDBAUG
+                -----END OPENSSH PRIVATE KEY-----
+      - name: Deploy via SSH
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ubuntu@ 3.101.126.106 << 'EOF'
+            cd /home/ubuntu/landingpage-test/Marketti.ae/LinkedIn
+            sudo git remote set-url origin https://Traptishukla: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
+            @github.com/Traptishukla/landingpage-test.git
+
+            sudo git checkout main
+            sudo git pull origin main
+            sudo npm install
+            sudo pm2 start npm --name LinkedIn -- start
+          EOF
