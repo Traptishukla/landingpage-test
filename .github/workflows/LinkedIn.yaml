@@ -21,21 +21,61 @@ jobs:
             ssh-keyscan -H  3.101.126.106 >> ~/.ssh/known_hosts
         env:
             SSH_KEY: |
-               -----BEGIN OPENSSH PRIVATE KEY-----
-               b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-               QyNTUxOQAAACAsdZ0pmX7srjhH1OtOmjUYI0Oa59dOAii3xS1lLoDeWAAAAKARB3edEQd3
-               nQAAAAtzc2gtZWQyNTUxOQAAACAsdZ0pmX7srjhH1OtOmjUYI0Oa59dOAii3xS1lLoDeWA
-               AAAECqG1yjTzEyXJam/Y2EnesaN6YuQDPdZzlMYQKuFVBeSyx1nSmZfuyuOEfU606aNRgj
-               Q5rn104CKLfFLWUugN5YAAAAF3VidW50dUBpcC0xNzItMzEtMzEtMTQ0AQIDBAUG
-               -----END OPENSSH PRIVATE KEY-----
-                
-                
+              -----BEGIN OPENSSH PRIVATE KEY-----
+              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
+              -----END OPENSSH PRIVATE KEY-----
+                     
       - name: Deploy via SSH
         run: |
           ssh -i ~/.ssh/id_rsa ubuntu@3.101.126.106 << 'EOF'
             cd /home/ubuntu/landingpage-test/Marketti.ae/LinkedIn
-            sudo git remote set-url origin https://Traptishukla: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
-            @github.com/Traptishukla/landingpage-test.git
+            sudo git remote set-url origin https://Traptishukla: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@github.com/Traptishukla/landingpage-test.git
 
             sudo git checkout main
             sudo git pull origin main
