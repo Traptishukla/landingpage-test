@@ -16,22 +16,23 @@ jobs:
       - name: Write SSH private key
         run: |
             mkdir -p ~/.ssh
-            echo "$SSH_KEY" > ~/.ssh/id_ed25519
-            chmod 600 ~/.ssh/id_ed25519
+            echo "$SSH_KEY" > ~/.ssh/id_rsa
+            chmod 400 ~/.ssh/id_rsa
             ssh-keyscan -H  3.101.126.106 >> ~/.ssh/known_hosts
         env:
             SSH_KEY: |
+               -----BEGIN OPENSSH PRIVATE KEY-----
+               b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+               QyNTUxOQAAACAsdZ0pmX7srjhH1OtOmjUYI0Oa59dOAii3xS1lLoDeWAAAAKARB3edEQd3
+               nQAAAAtzc2gtZWQyNTUxOQAAACAsdZ0pmX7srjhH1OtOmjUYI0Oa59dOAii3xS1lLoDeWA
+               AAAECqG1yjTzEyXJam/Y2EnesaN6YuQDPdZzlMYQKuFVBeSyx1nSmZfuyuOEfU606aNRgj
+               Q5rn104CKLfFLWUugN5YAAAAF3VidW50dUBpcC0xNzItMzEtMzEtMTQ0AQIDBAUG
+               -----END OPENSSH PRIVATE KEY-----
                 
-                -----BEGIN OPENSSH PRIVATE KEY-----
-                 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-                 QyNTUxOQAAACBifutxv9b2PI/eBqbLqnf8HrHTeHXn7FxrI4sZerZURwAAAKDkt2sn5Ldr
-                 JwAAAAtzc2gtZWQyNTUxOQAAACBifutxv9b2PI/eBqbLqnf8HrHTeHXn7FxrI4sZerZURw
-                 AAAEARvHcL4MAVR5tg/pKeMzq8qFKyQT+d7HI2TXWS/AHUo2J+63G/1vY8j94Gpsuqd/we
-                 sdN4defsXGsjixl6tlRHAAAAF3VidW50dUBpcC0xNzItMzEtMzEtMTQ0AQIDBAUG
-                -----END OPENSSH PRIVATE KEY-----
+                
       - name: Deploy via SSH
         run: |
-          ssh -i ~/.ssh/id_ed25519 ubuntu@3.101.126.106 << 'EOF'
+          ssh -i ~/.ssh/id_rsa ubuntu@3.101.126.106 << 'EOF'
             cd /home/ubuntu/landingpage-test/Marketti.ae/LinkedIn
             sudo git remote set-url origin https://Traptishukla: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
             @github.com/Traptishukla/landingpage-test.git
